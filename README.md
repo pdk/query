@@ -3,7 +3,7 @@
 This is a very simple SQL query builder/helper, supporting in-place variable binding.
 
     import (
-        a "github.com/pdk/query"
+        q "github.com/pdk/query"
     )
 
     qry := q.Select("alpha", "sum(beta) as beta").
