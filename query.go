@@ -120,8 +120,9 @@ func (b Builder) BindValues() []interface{} {
 	vals := getBindValues(b.selects, nil)
 	vals = getBindValues(b.froms, vals)
 	vals = getBindValues(b.wheres, vals)
-	vals = getBindValues(b.orders, vals)
+	vals = getBindValues(b.groups, vals)
 	vals = getBindValues(b.havings, vals)
+	vals = getBindValues(b.orders, vals)
 
 	return vals
 }
