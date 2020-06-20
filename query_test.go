@@ -8,8 +8,7 @@ import (
 
 func TestMakingQueries(t *testing.T) {
 
-	b := q.New().
-		Select("a", "b as boink", "c").
+	b := q.Select("a", "b as boink", "c").
 		From("foo").
 		Where("a =", q.Bind(1)).
 		Where("x >", q.Bind("fred"))
