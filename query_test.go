@@ -38,7 +38,35 @@ func TestMakingQueries(t *testing.T) {
 	exp = "select alpha, sum(beta) as beta from foo where gamma = $1 group by alpha having sum(beta) > $2 order by sum(beta) desc"
 
 	if sql != exp {
-		t.Errorf("expected %s, got >>%s<<", exp, sql)
+		t.Errorf("expected %s, got %s", exp, sql)
 	}
 
+}
+
+func TestWhereBuilding(t *testing.T) {
+
+	b := q.Where("age =", q.Bind(42)).
+		OrderBy("name", "city")
+
+	a := q.Select("name", "age", "city").
+		From("glorp_bliff")
+
+	sql := a.Merge(b).SQL()
+
+	exp := "select name, age, city from glorp_bliff where age = $1 order by name, city"
+
+	if sql != exp {
+		t.Errorf("expected %s, got %s", exp, sql)
+	}
+
+	b = q.Where("name like", q.Bind("x%")).
+		Where("city like", q.Bind("san f%"))
+
+	sql = a.Merge(b).SQL()
+
+	exp = "select name, age, city from glorp_bliff where name like $1 and city like $2"
+
+	if sql != exp {
+		t.Errorf("expected %s, got %s", exp, sql)
+	}
 }

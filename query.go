@@ -30,6 +30,11 @@ func (b Builder) From(tableNames ...string) Builder {
 	return b
 }
 
+// Where starts a new builder with a where clause
+func Where(expression ...interface{}) Builder {
+	return Builder{}.Where(expression...)
+}
+
 // Where adds a where clause, eg:
 // .Where("(t.col2 =", Bind(42), "or t.col5 >", Bind(-1), ")")
 func (b Builder) Where(expression ...interface{}) Builder {

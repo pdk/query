@@ -9,13 +9,26 @@ type QueryElement interface {
 	bindValues([]interface{}) []interface{}
 }
 
+type QueryElements []QueryElement
+
 type Builder struct {
-	selects []QueryElement
-	froms   []QueryElement
-	wheres  []QueryElement
-	groups  []QueryElement
-	havings []QueryElement
-	orders  []QueryElement
+	selects QueryElements
+	froms   QueryElements
+	wheres  QueryElements
+	groups  QueryElements
+	havings QueryElements
+	orders  QueryElements
+}
+
+func (b Builder) Merge(other Builder) Builder {
+	return Builder{
+		selects: b.selects.appendAll(other.selects),
+		froms:   b.froms.appendAll(other.froms),
+		wheres:  b.wheres.appendAll(other.wheres),
+		groups:  b.groups.appendAll(other.groups),
+		havings: b.havings.appendAll(other.havings),
+		orders:  b.orders.appendAll(other.orders),
+	}
 }
 
 // SQL returns the complete SQL from the query
