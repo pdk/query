@@ -32,6 +32,9 @@ func (b Builder) addOrder(item QueryElement) Builder {
 	return b
 }
 
+// For a demo of why we need our own append func, see
+// https://play.golang.org/p/jE4bRFWHtMB
+
 // append does a "safe" append, making a new copy
 func (e QueryElements) append(items ...QueryElement) QueryElements {
 
