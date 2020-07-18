@@ -73,6 +73,11 @@ func Bind(value interface{}) QueryElement {
 	}
 }
 
+// Binder places an empty bind value
+func Binder() QueryElement {
+	return bindValue{}
+}
+
 // Expr builds a single expression from elements
 func Expr(expression ...interface{}) QueryElement {
 
