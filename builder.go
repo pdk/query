@@ -1,6 +1,9 @@
 package query
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 // query.Builder is basically just a collection of QueryElements
 
@@ -18,6 +21,8 @@ type Builder struct {
 	groups  QueryElements
 	havings QueryElements
 	orders  QueryElements
+	limit   int
+	offset  int
 }
 
 func (b Builder) Merge(other Builder) Builder {
@@ -28,7 +33,23 @@ func (b Builder) Merge(other Builder) Builder {
 		groups:  b.groups.appendAll(other.groups),
 		havings: b.havings.appendAll(other.havings),
 		orders:  b.orders.appendAll(other.orders),
+		limit:   minInt(b.limit, other.limit),
+		offset:  maxInt(b.offset, other.offset),
 	}
+}
+
+func maxInt(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 // SQL returns the complete SQL from the query
@@ -44,6 +65,16 @@ func (b Builder) SQL() string {
 	writeSQL(sb, &bindCount, " group by ", ", ", b.groups)
 	writeSQL(sb, &bindCount, " having ", " and ", b.havings)
 	writeSQL(sb, &bindCount, " order by ", ", ", b.orders)
+
+	if b.limit > 0 {
+		sb.WriteString(" limit ")
+		sb.WriteString(strconv.Itoa(b.limit))
+	}
+
+	if b.offset > 0 {
+		sb.WriteString(" offset ")
+		sb.WriteString(strconv.Itoa(b.offset))
+	}
 
 	return sb.String()
 }

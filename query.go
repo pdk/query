@@ -61,6 +61,18 @@ func (b Builder) OrderBy(orderBys ...string) Builder {
 	return b
 }
 
+// Limit adds a limit
+func (b Builder) Limit(limit int) Builder {
+	b.limit = limit
+	return b
+}
+
+// Offset adds an offset
+func (b Builder) Offset(offset int) Builder {
+	b.offset = offset
+	return b
+}
+
 // Having adds a single having conditions
 func (b Builder) Having(expression ...interface{}) Builder {
 	return b.addHaving(Expr(expression...))

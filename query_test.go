@@ -70,3 +70,15 @@ func TestWhereBuilding(t *testing.T) {
 		t.Errorf("expected %s, got %s", exp, sql)
 	}
 }
+
+func TestLimitOffset(t *testing.T) {
+
+	x := q.Select("a", "b").From("foo").OrderBy("b desc").Limit(50).Offset(100)
+
+	sql := x.SQL()
+	exp := "select a, b from foo order by b desc limit 50 offset 100"
+
+	if sql != exp {
+		t.Errorf("expected %s, got %s", exp, sql)
+	}
+}
